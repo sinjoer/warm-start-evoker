@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class TaskService {
@@ -12,8 +12,7 @@ export class TaskService {
     private readonly httpService: HttpService,
   ) {}
 
-  // RUN EVERY 2 MINUTES
-  @Cron('*/2 * * * *')
+  @Cron(CronExpression.EVERY_MINUTE)
   async handleCron() {
     const url = this.configService.get<string>('TARGET_DOMAIN');
     const { status } = await this.httpService.axiosRef.get(url);
